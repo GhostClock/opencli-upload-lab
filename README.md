@@ -4,6 +4,12 @@
 
 上游：[jackwener/opencli](https://github.com/jackwener/opencli)。本项目与上游维护者无隶属关系，不代表官方版本。
 
+## 普通用户：下载 ZIP 即可安装
+
+打包版无需 Node.js、Python 或自行编译。下载 `opencli-upload-lab-1.0.24.1.zip`，解压后打开 `chrome://extensions`，启用开发者模式，停用旧版，再“加载已解压的扩展程序”，选择含 `manifest.json` 的文件夹。详见 [安装说明](INSTALL.md)。OpenCLI CLI 仍需自行安装。
+
+当前已配置 GitHub Actions 打包，但首次线上运行须等工作流推送到远程后。Actions 页对应运行的 Artifacts 中会包含扩展 ZIP 和 `SHA256SUMS.txt`；下载可能需要登录 GitHub，并解压外层 artifact ZIP。当前尚无已发布的 Release 下载，不要把源码 ZIP 当扩展包。
+
 ## 版本与优势
 
 | 项目 | 说明 |
@@ -52,7 +58,21 @@ node scripts/build.mjs "<官方扩展目录>"
 
 2026-10-10，开发环境中已完成真实 Chrome 可见／隐藏文件输入验证，包括文件内容、大小、单次 change 事件及样式恢复；也完成抖音视频与横竖双封面自动上传、应用及目视验收。公开仓库不包含账号、后台截图、媒体或浏览器资料。
 
-上述真实验收来自原项目中的同一上传修补函数。本仓库重新整理的构建入口已通过本地构建、背景脚本语法、权限一致性及原安装未改动检查；尚未单独加载本仓库生成的扩展进行新一轮真实浏览器验收。模拟测试不等于所有网站验收。视频上传验收不代表草稿保存恢复或公开发布成功。
+本仓库重新整理的构建入口已通过本地构建、背景脚本语法、权限一致性及原安装未改动检查；用户重新加载本仓库生成的扩展后，可见／隐藏输入的真实本机上传测试通过，见 [真实验收记录](tests/LIVE_VALIDATION.md)。抖音验收来自原项目同一修补函数，未针对本仓库重新操作平台。模拟测试不等于所有网站验收。视频上传验收不代表草稿保存恢复或公开发布成功。
+
+## GitHub Actions 打包
+
+[工作流](.github/workflows/package.yml) 支持 main 分支 push、PR 与手动运行。仅使用仓库读取权限，不执行 GitHub Release 发布。
+
+流程：测试 → 下载固定官方 1.0.24 ZIP → 核对 `upstream.json` 中 SHA256 → 核对上传函数基线 → 独立构建 → 语法检查 → 校验权限和 ZIP 文件范围 → 生成安装 ZIP 与校验文件 → 保存 artifact 30天。
+
+开发者可在已安装 Node.js、Python 的 PowerShell 环境运行同一打包入口：
+
+```powershell
+./scripts/package.ps1
+```
+
+输出位于 `dist/`，构建中间产物是 `dist/package-extension`。此目录已存在时会拒绝覆盖，重复运行前需自行移走。构建及下载目录均不纳入 Git。
 
 组合修补有效，但尚未单独测量用户手势与隐藏显示的各自贡献。没有验证所有网站、Chrome 版本、iframe 或 shadow DOM 场景。动态页面替换输入节点可能影响样式恢复；CSS 选择器需要现场核对。当前基线固定为 1.0.24，不能承诺兼容后续上游版本。
 

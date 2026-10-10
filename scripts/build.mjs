@@ -6,8 +6,9 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
 if (!process.argv[2]) throw new Error('Usage: node scripts/build.mjs <upstream-extension-directory>');
 const source = fs.realpathSync(process.argv[2]);
-const output = path.join(root, 'dist/extension');
-if (source === root || source.startsWith(root + path.sep)) throw new Error('Use an upstream directory outside this repository');
+const output = path.resolve(root, process.argv[3] || 'dist/extension');
+if (!output.startsWith(path.join(root, 'dist') + path.sep)) throw new Error('Output must be inside dist');
+if (source === output || source.startsWith(output + path.sep) || output.startsWith(source + path.sep)) throw new Error('Source and output must not overlap');
 if (fs.existsSync(output)) throw new Error('Output already exists; move dist/extension aside before rebuilding');
 const manifest = JSON.parse(fs.readFileSync(path.join(source, 'manifest.json'), 'utf8'));
 if (manifest.version !== '1.0.24') throw new Error('Only upstream 1.0.24 is supported');
@@ -38,4 +39,4 @@ fs.writeFileSync(path.join(root, 'dist/patch-record.json'), JSON.stringify({
   original_sha256: sha(original), patched_sha256: sha(patched),
   scope: 'setFileInputFiles only; permissions unchanged'
 }, null, 2) + '\n');
-console.log('Built dist/extension; source installation was not modified.');
+console.log('Built extension; source installation was not modified.');
