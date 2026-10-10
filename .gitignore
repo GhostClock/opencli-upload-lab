@@ -1,0 +1,14 @@
+node_modules/
+dist/
+artifacts/
+.env
+.env.*
+*.pem
+*.key
+*.log
+*.zip
+*.crx
+*.png
+*.jpg
+*.mp4
+*.local.*

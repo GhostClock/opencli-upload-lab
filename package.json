@@ -1,0 +1,10 @@
+{
+  "name": "opencli-upload-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Unofficial file upload patch for OpenCLI Browser Bridge 1.0.24",
+  "license": "Apache-2.0",
+  "engines": { "node": ">=20.18.1" },
+  "scripts": { "test": "node tests/upload.test.mjs", "build": "node scripts/build.mjs" }
+}

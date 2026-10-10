@@ -1,0 +1,11 @@
+OpenCLI Upload Lab
+Unofficial derivative patch for OpenCLI Browser Bridge 1.0.24.
+Upstream: https://github.com/jackwener/opencli
+Copyright 2025 jackwener
+Licensed under the Apache License, Version 2.0.
+
+Modifications: user gesture for file input click, hidden input reveal and
+style restoration, input validation and cleanup. Modified extension identity
+and removed fixed key and store update URL for independent local loading.
+The upstream upload function is retained as a regression fixture.
+This project is not affiliated with or endorsed by the upstream maintainers.
